@@ -36,6 +36,18 @@ public class LibraryService {
     public boolean isBookInLibraryByIsbn(String isbn) {
         // PARTICIPANTS: IMPLEMENT YOUR BINARY SEARCH HERE
 
+        BookNode current = books;
+        while (current != null) {
+            int comparison = isbn.compareTo(current.getBook().getIsbn());
+            if (comparison == 0) {
+                return true;
+            } else if (comparison < 0) {
+                current = current.getLeft();
+            } else {
+                current = current.getRight();
+            }
+        }
+
         throw new NotImplementedException("isBookInLibraryByIsbn is not yet implemented!");
     }
 
@@ -51,7 +63,22 @@ public class LibraryService {
      */
     public boolean isBookInLibraryByTitleAndAuthor(String title, String author) {
         // PARTICIPANTS: IMPLEMENT YOUR DEPTH FIRST SEARCH HERE
+        if (title == null || title.isEmpty() || author == null || author.isEmpty()) {
+            return false;
+        }
+        return depthFirstSearch(books, title, author);
+    }
+     private boolean depthFirstSearch(BookNode node, String title, String author) {
+        if (node == null) {
+            return false;
+        }
+         // Check if the current node's book matches the title and author
+         if (node.getBook().getTitle().equals(title) && node.getBook().getAuthor().equals(author)) {
+             return true;
+         }
+         // Recursively search left and right subtrees
+         return depthFirstSearch(node.getLeft(), title, author) ||
+                 depthFirstSearch(node.getRight(), title, author);
 
-        throw new NotImplementedException("isBookInLibraryByTitleAndAuthor is not yet implemented!");
     }
 }
